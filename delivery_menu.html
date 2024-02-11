@@ -1,0 +1,35 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>{{ title }}</h1>
+    <div class="row">
+        {% if orders %}
+        <div class="col-md-12">
+            <div class="list-group">
+                {% for order in orders %}
+                <div class="list-group-item">
+                    <h5 class="list-group-item-heading">Order ID: {{ order.id }}</h5>
+                    <p class="list-group-item-text">Customer: {{ order.customer }}</p>
+                    <p class="list-group-item-text">Address: {{ order.address }}</p>
+                    <p class="list-group-item-text">Total: ${{ order.total }}</p>
+                    <form action="{% url 'accept_order' order.id %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Accept</button>
+                    </form>
+                    <form action="{% url 'reject_order' order.id %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Reject</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="col-md-12">
+            <p>No orders available.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
